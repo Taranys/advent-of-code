@@ -1,10 +1,11 @@
-require 'minitest/autorun'
+# frozen_string_literal: true
 
-require_relative '../../../lib/advent_of_code/day1/day1'
+require "minitest/autorun"
+
+require_relative "../../../lib/advent_of_code/day1/day1"
 
 module AdventOfCode
   class Day1Test < Minitest::Test
-
     def test_no_data
       assert_equal 0, day1_simple([])
       assert_equal 0, day1_complex([])
@@ -31,7 +32,7 @@ module AdventOfCode
     end
 
     def test_final
-      values = File.open('./test/advent_of_code/day1/input.txt').readlines.map{|v| v.to_i}
+      values = File.open("./test/advent_of_code/day1/input.txt").readlines.map(&:to_i)
 
       assert_equal 1215, day1_simple(values)
       assert_equal 1150, day1_complex(values)
@@ -44,6 +45,5 @@ module AdventOfCode
     def day1_complex(input)
       AdventOfCode::Day1.complex_measure(input)
     end
-
   end
 end

@@ -1,26 +1,18 @@
+# frozen_string_literal: true
 
 module AdventOfCode
+  # Day 1 of the advent of code 2021
   class Day1
     def self.simple_measure(input)
-      count = 0
-
-      input.each_index do |index|
-        next if index == 0
-        count = count + 1 if input[index-1].to_i < input[index].to_i
-      end
-
-      count
+      input
+        .map.with_index { |v, i| i.zero? || input[i - 1] > v ? 0 : 1 }
+        .sum
     end
 
     def self.complex_measure(input)
-      count = 0
-
-      input.each_index do |index|
-        next if index < 3
-        count = count + 1 if input[index-3..index-1].sum < input[index-2..index].sum
-      end
-
-      count
+      input
+        .map.with_index { |_v, i| i < (input.size - 3) && input[i..i + 2].sum < input[i + 1..i + 3].sum ? 1 : 0 }
+        .sum
     end
   end
 end
