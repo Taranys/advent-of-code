@@ -2,6 +2,7 @@
 
 require "minitest/autorun"
 
+require_relative "../helper"
 require_relative "../../../lib/advent_of_code/day1/day1"
 
 module AdventOfCode
@@ -32,7 +33,7 @@ module AdventOfCode
     end
 
     def test_final
-      values = File.open("./test/advent_of_code/day1/input.txt").readlines.map(&:to_i)
+      values = AdventOfCode::Helper.loadInput(1).map(&:to_i)
 
       assert_equal 1215, day1_simple(values)
       assert_equal 1150, day1_complex(values)
