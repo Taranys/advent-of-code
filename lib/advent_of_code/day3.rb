@@ -2,47 +2,48 @@
 
 module AdventOfCode
   # Day 3
-  class Day3
-    def self.power_consumption(input)
-      gamma = input.transpose
-         .map { |values| values.count(0) }
-         .map { |number_of_0| number_of_0 >= (input.count / 2) ? 0 : 1 }
-         .join
-
-      [gamma.to_i(2), gamma.chars.map{ |v| v == '0' ? '1' : '0' }.join.to_i(2)]
+  class DiagnosticReport
+    def initialize(input)
+      @data = input.map(&:strip).map { |entry| entry.each_char.map(&:to_i) }
     end
 
-    def self.bit_criteria(input, position)
-      number_of_0 = input.count { |value| value[position] == '0' }
-      return 1 if number_of_0 == (input.count / 2)
-      number_of_0 >= (input.count / 2) ? 0 : 1
+    def most_common_bit(position = 0, data = @data)
+      data.map { |v| v[position] }.count(0) > (data.size / 2) ? 0 : 1
     end
 
-    def self.oxygen_generator_support(input)
-      result = ''
+    def less_common_bit(position = 0, data = @data)
+      most_common_bit(position, data).zero? ? 1 : 0
+    end
 
-      for i in 0..input[0].size-1
-        p input
-        bc = bit_criteria(input, i).to_s
-        result += bc
-        input = input.select{ |value| value[i] == bc }
+    def gamma
+      power_consumption(:most_common_bit)
+    end
+
+    def epsilon
+      power_consumption(:less_common_bit)
+    end
+
+    def o2
+      life_support(:most_common_bit)
+    end
+
+    def co2
+      life_support(:less_common_bit)
+    end
+
+    private
+
+    def power_consumption(bit_method)
+      @data[0].map.with_index { |_, i| send(bit_method, i) }.join.to_i(2)
+    end
+
+    def life_support(bit_method)
+      data = @data
+      @data[0].size.times do |index|
+        data = data.select { |line| send(bit_method, index, data) == line[index] }
+        break if data.size == 1
       end
-
-      result.to_i(2)
-    end
-
-    def self.c02(input)
-      result = ''
-
-      for i in 0..input[0].size-1
-        p input
-        return input[0].to_i(2) if input.size == 1
-        bc = (bit_criteria(input, i) == 0 ? 1 : 0).to_s
-        result += bc
-        input = input.select{ |value| value[i] == bc }
-      end
-
-      result.to_i(2)
+      data[0].join.to_i(2)
     end
   end
 end
