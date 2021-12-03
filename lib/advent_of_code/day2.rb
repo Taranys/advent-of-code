@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module AdventOfCode
+  # Day 2 submarine
   class Day2
     attr_accessor :horizontal, :depth, :aim
 
@@ -11,15 +14,7 @@ module AdventOfCode
     def move(input)
       input.each do |line|
         direction, value = line.split
-
-        case direction
-        when "forward"
-          @horizontal = @horizontal + value.to_i
-        when "down"
-          @depth = @depth + value.to_i
-        when "up"
-          @depth = @depth - value.to_i
-        end
+        compute_position(direction, value)
       end
 
       self
@@ -28,19 +23,35 @@ module AdventOfCode
     def move_with_aim(input)
       input.each do |line|
         direction, value = line.split
-
-        case direction
-        when "forward"
-          @horizontal = @horizontal + value.to_i
-          @depth = @depth + value.to_i * @aim
-        when "down"
-          @aim = @aim + value.to_i
-        when "up"
-          @aim = @aim - value.to_i
-        end
+        compute_position_with_aim(direction, value)
       end
 
       self
+    end
+
+    private
+
+    def compute_position(direction, value)
+      case direction
+      when "forward"
+        @horizontal += value.to_i
+      when "down"
+        @depth += value.to_i
+      when "up"
+        @depth -= value.to_i
+      end
+    end
+
+    def compute_position_with_aim(direction, value)
+      case direction
+      when "forward"
+        @horizontal += value.to_i
+        @depth += value.to_i * @aim
+      when "down"
+        @aim += value.to_i
+      when "up"
+        @aim -= value.to_i
+      end
     end
   end
 end

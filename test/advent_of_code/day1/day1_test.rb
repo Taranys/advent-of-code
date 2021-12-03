@@ -33,7 +33,7 @@ module AdventOfCode
     end
 
     def test_final
-      values = AdventOfCode::Helper.loadInput(1).map(&:to_i)
+      values = AdventOfCode::Helper.load_input(1).map(&:to_i)
 
       assert_equal 1215, day1_simple(values)
       assert_equal 1150, day1_complex(values)

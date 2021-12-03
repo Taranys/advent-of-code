@@ -50,15 +50,15 @@ module AdventOfCode
     end
 
     def test_final
-      submarine = create_submarine.move(AdventOfCode::Helper.loadInput(2))
+      submarine = create_submarine.move(AdventOfCode::Helper.load_input(2))
 
-      assert_equal 1561344, submarine.depth * submarine.horizontal
+      assert_equal 1_561_344, submarine.depth * submarine.horizontal
     end
 
     def test_final_with_aim
-      submarine = create_submarine.move_with_aim(AdventOfCode::Helper.loadInput(2))
+      submarine = create_submarine.move_with_aim(AdventOfCode::Helper.load_input(2))
 
-      assert_equal 1848454425, submarine.depth * submarine.horizontal
+      assert_equal 1_848_454_425, submarine.depth * submarine.horizontal
     end
 
     def create_submarine
