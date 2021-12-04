@@ -7,8 +7,7 @@ require_relative "../../../lib/advent_of_code/day4"
 
 module AdventOfCode
   class Day4Test < Minitest::Test
-    def test_example
-      input = %[
+    EXAMPLE = %(
       7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1
 
 22 13 17 11  0
@@ -28,25 +27,16 @@ module AdventOfCode
 18  8 23 26 20
 22 11 13  6  5
  2  0 12  3  7
-].split("\n")
+).split("\n")
 
-      input2 = AdventOfCode::Helper.load_input(4)
+    def test_example
+      # input = AdventOfCode::Helper.load_input(4)
+      numbers, game = Day4.parse(EXAMPLE)
 
-      numbers, boards = Day4.parse(input2)
+      numbers.each { |number| game.play(number) }
 
-      winners = []
-      numbers.each do |number|
-        boards.each { |board| board.mark(number) }
-        boards.each do |board|
-          if board.bingo?
-            winners << board.result(number)
-            boards = boards.reject{ |b| b == board }
-          end
-        end
-      end
-
-      p winners.first
-      p winners.last
+      assert_equal 4512, game.winners.first
+      assert_equal 1924, game.winners.last
     end
   end
 end
