@@ -31,6 +31,12 @@ module AdventOfCode
     def bingo?
       return true if @data.any? { |line| line.all? { |a| a[:marked] } }
 
+      for i in 0..4
+        return true if @data[0][i][:marked] && @data[1][i][:marked] && @data[2][i][:marked] && @data[3][i][:marked] && @data[4][i][:marked]
+      end
+
+      # diagonal are not used in the exercise
+
       false
     end
 

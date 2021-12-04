@@ -34,16 +34,19 @@ module AdventOfCode
 
       numbers, boards = Day4.parse(input2)
 
+      winners = []
       numbers.each do |number|
-        p "NUMBER #{number}"
         boards.each { |board| board.mark(number) }
         boards.each do |board|
           if board.bingo?
-            p board.result(number)
-            return
+            winners << board.result(number)
+            boards = boards.reject{ |b| b == board }
           end
         end
       end
+
+      p winners.first
+      p winners.last
     end
   end
 end
