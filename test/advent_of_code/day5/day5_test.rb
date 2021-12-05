@@ -28,13 +28,18 @@ module AdventOfCode
       assert_equal [[7,7], [8,7], [9,7]], Day5.vents_positions("9,7 -> 7,7")
     end
 
+    def test_diag
+      assert_equal [[1,1], [2,2], [3,3]], Day5.vents_positions("1,1 -> 3,3")
+      assert_equal [[7,9], [8,8], [9,7]], Day5.vents_positions("9,7 -> 7,9")
+    end
+
     def test_example
       map = Array.new(10) { Array.new(10, 0) }
 
       positions = EXAMPLE.map { |line| Day5.vents_positions(line) }.flatten(1)
       positions.each { |p| map[p[1]][p[0]] += 1 }
 
-      assert_equal 5, map.flatten.reject { |a| a < 2 }.count
+      assert_equal 12, map.flatten.reject { |a| a < 2 }.count
     end
 
     def test_input
@@ -44,7 +49,7 @@ module AdventOfCode
       positions = input.map { |line| Day5.vents_positions(line) }.flatten(1)
       positions.each { |p| map[p[1]][p[0]] += 1 }
 
-      assert_equal 5197, map.flatten.reject { |a| a < 2 }.count
+      assert_equal 18605, map.flatten.reject { |a| a < 2 }.count
     end
   end
 end
