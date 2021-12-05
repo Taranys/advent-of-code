@@ -11,17 +11,29 @@ module AdventOfCode
 
     def self.test(start, stop)
       if start[1] == stop[1]
-        start, stop = stop, start if start[0] > stop[0]
-        (start[0]..stop[0]).to_a.map.with_index { |value| [value, start[1]] }
+        line(start, stop)
       elsif start[0] == stop[0]
-        start, stop = stop, start if start[1] > stop[1]
-        (start[1]..stop[1]).to_a.map.with_index { |value| [start[0], value] }
+        column(start, stop)
       else
-        start, stop = stop, start if start[0] > stop[0]
+        diagonal(start, stop)
+      end
+    end
 
-        (start[0]..stop[0]).to_a.map.with_index do |_, index|
-          [start[0] + index, start[1] < stop[1] ? start[1] + index : start[1] - index ]
-        end
+    def self.line(start, stop)
+      start, stop = stop, start if start[0] > stop[0]
+      (start[0]..stop[0]).to_a.map { |value| [value, start[1]] }
+    end
+
+    def self.column(start, stop)
+      start, stop = stop, start if start[1] > stop[1]
+      (start[1]..stop[1]).to_a.map { |value| [start[0], value] }
+    end
+
+    def self.diagonal(start, stop)
+      start, stop = stop, start if start[0] > stop[0]
+
+      (start[0]..stop[0]).to_a.map.with_index do |_, index|
+        [start[0] + index, start[1] < stop[1] ? start[1] + index : start[1] - index]
       end
     end
   end
