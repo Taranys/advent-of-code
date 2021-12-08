@@ -2,7 +2,7 @@
 
 module AdventOfCode
   DIGITS = %w[abcefg cf acdeg acdfg bcdf abdfg abdefg acf abcdefg abcdfg].freeze
-  EXPECTED = DIGITS.map { |dig| dig.chars.map { |c| (c.ord - "a".ord).to_s }.join }
+  EXPECTED_SEGMENTS = DIGITS.map { |dig| dig.chars.map { |c| (c.ord - "a".ord).to_s }.join }
   # Day 8
   class Day8
     def self.count1478(values)
@@ -25,18 +25,18 @@ module AdventOfCode
 
       valid_permutation = possibilities.filter { |pos| valid?(pos, signal_patterns) }.first
 
-      valid_digit = output_digits.map { |output| EXPECTED.find_index(convert_output(valid_permutation, output)) }
+      valid_digit = output_digits.map do |output|
+        EXPECTED_SEGMENTS.find_index(to_segments(valid_permutation, output))
+      end
 
       valid_digit.join.to_i
     end
 
     def self.valid?(pos, values)
-      test = values.map { |v| convert_output(pos, v) }
-
-      test.all? { |values| EXPECTED.include?(values) }
+      values.map { |v| to_segments(pos, v) }.all? { |segments| EXPECTED_SEGMENTS.include?(segments) }
     end
 
-    def self.convert_output(map, output)
+    def self.to_segments(map, output)
       output.chars.map { |c| map.find_index(c) }.sort.join
     end
   end
