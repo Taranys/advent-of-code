@@ -15,12 +15,13 @@ module AdventOfCode
 9899965678
 ).split("\n").map(&:strip).reject(&:empty?)
     def test_example
-      assert_equal 15, Day9.new(EXAMPLE).low_points.map { |v| v + 1 }.sum
+      basin = SmokeBasin.new(EXAMPLE)
+      assert 15, basin.low_points.map(&:risk_level).sum
     end
 
     def test_final
-      input = Helper.load_input(9)
-      assert_equal 539, Day9.new(input).low_points.map { |v| v + 1 }.sum
+      basin = SmokeBasin.new(Helper.load_input(9))
+      assert_equal 539, basin.low_points.map(&:risk_level).sum
     end
   end
 end
