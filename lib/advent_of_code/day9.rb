@@ -4,13 +4,18 @@ module AdventOfCode
   # SmokeBasin
   class SmokeBasin
     def initialize(input)
-      @map = input.map { |line| line.chars.map { |v| Point.new(v.to_i) } }
+      @map = input.map.with_index { |line, x| line.chars.map.with_index { |v, y| Point.new(v.to_i, x, y) } }
 
       find_low_points
+      low_points.each { |point| define_basin(point) }
     end
 
     def low_points
       @map.flatten.filter(&:low)
+    end
+
+    def basins
+      @map.flatten.group_by { |point| point.basin_core }
     end
 
     private
@@ -19,13 +24,23 @@ module AdventOfCode
       @map.each_with_index do |line, row|
         line.each_with_index do |_, column|
           current = @map[row][column]
-          current.low = true if adjacent_points(row, column).all? { |adj| adj.risk_level > current.risk_level }
+          current.low = true if adjacent_points(current.coordinate).all? { |adj| adj.risk_level > current.risk_level }
         end
       end
     end
 
+    def define_basin(point)
+      adjacent_points(point.coordinate).each do |adj|
+        next unless adj.basin_core.nil?
+        next if adj.risk_level == 10
+        adj.basin_core = point.basin_core
+        define_basin(adj)
+      end
+    end
+
     # rubocop:disable Metrics/AbcSize
-    def adjacent_points(row, column)
+    def adjacent_points(coordinate)
+      row, column = coordinate
       adjacents = []
 
       adjacents << @map[row][column - 1] if column.positive?
@@ -40,14 +55,26 @@ module AdventOfCode
 
   # Point
   class Point
-    attr_accessor :low
+    attr_accessor :low, :basin_core
 
-    def initialize(value)
+    def initialize(value, row, column)
       @value = value
+      @row = row
+      @column = column
+      @basin_core = nil
+    end
+
+    def low=(value)
+      @low = value
+      @basin_core = self
     end
 
     def risk_level
       @value + 1
+    end
+
+    def coordinate
+      [@row, @column]
     end
   end
 end
