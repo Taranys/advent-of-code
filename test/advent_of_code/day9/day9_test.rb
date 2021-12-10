@@ -17,13 +17,13 @@ module AdventOfCode
     def test_example
       basin = SmokeBasin.new(EXAMPLE)
       assert 15, basin.low_points.map(&:risk_level).sum
-      assert 1134, basin.basins.to_a.map { |group| group[0].nil? ? 0 : group[1].size }.sort.reverse.take(3).inject(:*)
+      assert 1134, basin.basins.sort { |a, b| a <=> b }.take(3).inject(:*)
     end
 
     def test_final
       basin = SmokeBasin.new(Helper.load_input(9))
       assert_equal 539, basin.low_points.map(&:risk_level).sum
-      assert_equal 736920, basin.basins.to_a.map { |group| group[0].nil? ? 0 : group[1].size }.sort.reverse.take(3).inject(:*)
+      assert_equal 736_920, basin.basins.sort { |a, b| a <=> b }.take(3).inject(:*)
     end
   end
 end

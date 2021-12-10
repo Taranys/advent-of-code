@@ -15,7 +15,7 @@ module AdventOfCode
     end
 
     def basins
-      @map.flatten.group_by { |point| point.basin_core }
+      @map.flatten.group_by(&:basin_core).to_a.map { |group| group[0].nil? ? 0 : group[1].size }
     end
 
     private
@@ -33,6 +33,7 @@ module AdventOfCode
       adjacent_points(point.coordinate).each do |adj|
         next unless adj.basin_core.nil?
         next if adj.risk_level == 10
+
         adj.basin_core = point.basin_core
         define_basin(adj)
       end
@@ -55,7 +56,8 @@ module AdventOfCode
 
   # Point
   class Point
-    attr_accessor :low, :basin_core
+    attr_reader :low
+    attr_accessor :basin_core
 
     def initialize(value, row, column)
       @value = value
