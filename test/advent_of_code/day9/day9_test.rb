@@ -23,7 +23,7 @@ module AdventOfCode
     def test_final
       basin = SmokeBasin.new(Helper.load_input(9))
       assert_equal 539, basin.low_points.map(&:risk_level).sum
-      assert_equal 736_920, basin.basins.sort { |a, b| a <=> b }.take(3).inject(:*)
+      assert_equal 736_920, basin.basins.sort { |a, b| -(a <=> b) }.take(3).inject(:*)
     end
   end
 end
