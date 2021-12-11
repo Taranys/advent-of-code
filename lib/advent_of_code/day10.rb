@@ -24,8 +24,6 @@ module AdventOfCode
         line = line.sub("<>", "")
       end
 
-      # p [line.chars, test]
-
       line.chars.reverse.map do |c|
         case c
         when "("
