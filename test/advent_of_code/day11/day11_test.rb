@@ -6,7 +6,7 @@ require_relative "../helper"
 require_relative "../../../lib/advent_of_code/day11"
 
 module AdventOfCode
-  class Day10Test < Minitest::Test
+  class Day11Test < Minitest::Test
     EXAMPLE = """
 5483143223
 2745854711
@@ -22,12 +22,12 @@ module AdventOfCode
 
     def test_example
       assert_equal 1656, Cave.new(EXAMPLE).steps(100).octopuses.map(&:flash_count).sum
-      assert_equal 0, Cave.new(EXAMPLE).steps(200).octopuses.map(&:flash_count).sum
+      assert_equal 195, Cave.new(EXAMPLE).synchronized_step
     end
 
     def test_final
       assert_equal 1713, Cave.new(Helper.load_input(11)).steps(100).octopuses.map(&:flash_count).sum
-      assert_equal 1713, Cave.new(Helper.load_input(11)).steps(1000).octopuses.map(&:flash_count).sum
+      assert_equal 502, Cave.new(Helper.load_input(11)).synchronized_step
     end
   end
 end
