@@ -27,7 +27,7 @@ module AdventOfCode
 
     def test_final
       assert_equal 1713, Cave.new(Helper.load_input(11)).steps(100).octopuses.map(&:flash_count).sum
-      assert_equal 1713, Cave.new(Helper.load_input(11)).steps(300).octopuses.map(&:flash_count).sum
+      assert_equal 1713, Cave.new(Helper.load_input(11)).steps(1000).octopuses.map(&:flash_count).sum
     end
   end
 end

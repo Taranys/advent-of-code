@@ -15,8 +15,8 @@ module AdventOfCode
     def steps(value)
       value.times do |step|
         increase_octopuses
-        p step if @map.flatten.all? { |octopus| octopus.light_value >= 10 }
         clean_up
+        p (step + 1) if @map.flatten.all? { |octopus| octopus.light_value == 0 }
       end
 
       self
