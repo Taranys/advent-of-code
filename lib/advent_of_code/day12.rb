@@ -1,22 +1,19 @@
 # frozen_string_literal: true
 
 module AdventOfCode
+  # GPS
   class GPS
     attr_reader :result
+
     def initialize(input)
       @result = []
       @map = {}
 
       input.each do |line|
-        a, b = line.split('-')
+        a, b = line.split("-")
 
-        @map[a] = Cave.new(a) unless @map.include?(a)
-        @map[b] = Cave.new(b) unless @map.include?(b)
-
-        @map[a].adjacents << @map[b]
-        @map[b].adjacents << @map[a]
+        fill_map(a, b)
       end
-
     end
 
     def go_to_end
@@ -32,6 +29,7 @@ module AdventOfCode
 
       current.adjacents.each do |cave|
         next if cave.small? && paths.include?(cave.label)
+
         go_deep([*paths, cave.label], result)
       end
     end
@@ -51,14 +49,25 @@ module AdventOfCode
 
       current.adjacents.each do |cave|
         next unless visitor.visitable?(cave)
+
         go_deep_twice(visitor.next(cave))
       end
     end
+
+    private
+
+    def fill_map(cave1, cave2)
+      @map[cave1] = Cave.new(cave1) unless @map.include?(cave1)
+      @map[cave2] = Cave.new(cave2) unless @map.include?(cave2)
+
+      @map[cave1].adjacents << @map[cave2]
+      @map[cave2].adjacents << @map[cave1]
+    end
   end
 
+  # Cave
   class Cave
-    attr_reader :label
-    attr_reader :adjacents
+    attr_reader :label, :adjacents
 
     def initialize(input)
       @label = input
@@ -70,11 +79,12 @@ module AdventOfCode
     end
   end
 
+  # Visitor
   class Visitor
-    attr_reader :paths, :result, :double
+    attr_reader :paths, :result
     attr_accessor :double
 
-    def initialize(map, paths = ["start"], result = [], double = false)
+    def initialize(map, paths = ["start"], result = [], double: false)
       @map = map
       @paths = paths
       @result = result
@@ -86,15 +96,13 @@ module AdventOfCode
     end
 
     def next(cave)
-      Visitor.new(@map, [*@paths, cave.label], @result, double || (cave.small? && @paths.include?(cave.label)))
+      Visitor.new(@map, [*@paths, cave.label], @result, double: double || (cave.small? && @paths.include?(cave.label)))
     end
 
     def visitable?(cave)
       return false if cave.label == "start"
 
-      if cave.small? && @paths.include?(cave.label) && @double
-        return false
-      end
+      return false if cave.small? && @paths.include?(cave.label) && @double
 
       true
     end
