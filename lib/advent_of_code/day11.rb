@@ -2,7 +2,7 @@
 
 module AdventOfCode
   # Cave
-  class Cave
+  class Cave11
     attr_reader :octopuses
 
     def initialize(input)
