@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module AdventOfCode
+  # Cave
   class Cave
     attr_reader :octopuses
 
@@ -27,33 +28,34 @@ module AdventOfCode
     end
 
     def synchronized_step
-      10000000.times do |step|
+      10_000_000.times do |step|
         @octopuses.each(&:increase_light)
         @octopuses.each(&:clean_up)
-        return (step + 1) if @octopuses.all? { |octopus| octopus.light_value == 0 }
+        return (step + 1) if @octopuses.all? { |octopus| octopus.light_value.zero? }
       end
     end
 
     private
 
-    def find_adjacents(map, i, j)
+    def find_adjacents(map, row, column)
       result = []
 
-      result << map[i-1][j-1] if i > 0 && j > 0
-      result << map[i-1][j] if i > 0
-      result << map[i-1][j+1] if i > 0 && j < (map[0].size - 1)
+      result << map[row - 1][column - 1] if row.positive? && column.positive?
+      result << map[row - 1][column] if row.positive?
+      result << map[row - 1][column + 1] if row.positive? && column < (map[0].size - 1)
 
-      result << map[i][j-1] if j > 0
-      result << map[i][j+1] if j < (map[0].size - 1)
+      result << map[row][column - 1] if column.positive?
+      result << map[row][column + 1] if column < (map[0].size - 1)
 
-      result << map[i+1][j-1] if i < (map.size - 1) && j > 0
-      result << map[i+1][j] if i < (map.size - 1)
-      result << map[i+1][j+1] if i < (map.size - 1) && j < (map[0].size - 1)
+      result << map[row + 1][column - 1] if row < (map.size - 1) && column.positive?
+      result << map[row + 1][column] if row < (map.size - 1)
+      result << map[row + 1][column + 1] if row < (map.size - 1) && column < (map[0].size - 1)
 
       result
     end
   end
 
+  # Octopus
   class Octopus
     attr_reader :flash_count, :light_value
     attr_accessor :adjacents
@@ -66,16 +68,14 @@ module AdventOfCode
 
     def increase_light
       @light_value += 1
-      if @light_value == 10
-        @adjacents.each(&:increase_light)
-      end
+      @adjacents.each(&:increase_light) if @light_value == 10
     end
 
     def clean_up
-      if @light_value >= 10
-        @flash_count += 1
-        @light_value = 0
-      end
+      return unless @light_value >= 10
+
+      @flash_count += 1
+      @light_value = 0
     end
   end
 end
