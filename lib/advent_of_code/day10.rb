@@ -1,7 +1,14 @@
 # frozen_string_literal: true
 
 module AdventOfCode
+  # NavigationSystem
   class NavigationSystem
+    PAIR_MATCHER = /(\[\])|(\(\))|(\{\})|(<>)/.freeze
+    START_MATCHER = /(\[)|(\()|(\{)|(<)/.freeze
+
+    TO_PAIR = { "{" => "}", "[" => "]", "(" => ")", "<" => ">" }.freeze
+    TO_VALUE = { ")" => 3, "]" => 57, "}" => 1197, ">" => 25_137 }.freeze
+
     def initialize(input)
       @data = input
     end
@@ -17,61 +24,25 @@ module AdventOfCode
     private
 
     def find_auto_complete(line)
-      while line.include?("[]") || line.include?("{}") || line.include?("()") || line.include?("<>")
-        line = line.sub("[]", "")
-        line = line.sub("()", "")
-        line = line.sub("{}", "")
-        line = line.sub("<>", "")
-      end
+      line = clean_data(PAIR_MATCHER, line)
 
       line.chars.reverse.map do |c|
-        case c
-        when "("
-          ")"
-        when "{"
-          "}"
-        when "["
-        "]"
-        when "<"
-        ">"
-        else
-          return nil
-        end
+        return nil unless TO_PAIR.include?(c)
+
+        TO_PAIR[c]
       end
           .join
     end
 
     def find_illegal_character(line)
-      while line.include?("[]") || line.include?("{}") || line.include?("()") || line.include?("<>")
-        line = line.sub("[]", "")
-        line = line.sub("()", "")
-        line = line.sub("{}", "")
-        line = line.sub("<>", "")
-      end
-
-      while line.include?("[") || line.include?("{") || line.include?("(") || line.include?("<")
-        line = line.sub("[", "")
-        line = line.sub("(", "")
-        line = line.sub("{", "")
-        line = line.sub("<", "")
-      end
-
+      line = clean_data(PAIR_MATCHER, line)
+      line = clean_data(START_MATCHER, line)
       line.chars
     end
 
-    def self.char_to_i(char)
-      case char
-      when ")"
-        3
-      when "]"
-        57
-      when "}"
-        1197
-      when ">"
-        25137
-      else
-        raise StandardError("Invalid character #{char}")
-      end
+    def clean_data(regexp, line)
+      line = line.gsub(regexp, "") while regexp.match?(line)
+      line
     end
   end
 end

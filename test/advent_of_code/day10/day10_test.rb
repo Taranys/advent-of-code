@@ -7,7 +7,7 @@ require_relative "../../../lib/advent_of_code/day10"
 
 module AdventOfCode
   class Day10Test < Minitest::Test
-    EXAMPLE = """
+    EXAMPLE = '
 [({(<(())[]>[[{[]{<()<>>
 [(()[<>])]({[<{<<[]>>(
 {([(<{}[<>[]}>{[]{[(<()>
@@ -18,38 +18,37 @@ module AdventOfCode
 [<(<(<(<{}))><([]([]()
 <{([([[(<>()){}]>(<<{{
 <{([{{}}[<[[[<>{}]]]>[]]
-""".split("\n").map(&:strip).reject(&:empty?)
+'.split("\n").map(&:strip).reject(&:empty?)
 
-    EXAMPLE2 = """
+    EXAMPLE2 = '
 [({(<(())[]>[[{[]{<()<>>
 [(()[<>])]({[<{<<[]>>(
 (((({<>}<{<{<>}{[]{[]{}
 {<[[]]>}<{[{[{[]{()[[[]
 <{([{{}}[<[[[<>{}]]]>[]]
-""".split("\n").map(&:strip).reject(&:empty?)
+'.split("\n").map(&:strip).reject(&:empty?)
 
-    def test_example
+    def test_simple_case
       assert_equal [")"], illegal_characters(["[)"])
-      assert_equal 26397, illegal_characters(EXAMPLE).map { |char| NavigationSystem.char_to_i(char) }.sum
-
       assert_equal [")]"], auto_complete(["[("])
       assert_equal ["]>}"], auto_complete(["{<[()][()"])
       assert_equal "}}]])})]", auto_complete(EXAMPLE).first
+    end
+
+    def test_example
+      assert_equal 26_397, illegal_characters(EXAMPLE).map { |char| NavigationSystem::TO_VALUE[char] }.sum
 
       test = auto_complete(EXAMPLE).map { |v| value(v) }.sort
-      p test
-      assert_equal 288957, test[test.size / 2]
-
-      # assert 1134, basin.basins.sort { |a, b| a <=> b }.take(3).inject(:*)
+      assert_equal 288_957, test[test.size / 2]
     end
 
     def test_final
       navigation_system = NavigationSystem.new(Helper.load_input(10))
-      assert_equal 392043, navigation_system.illegal_characters.map { |char| NavigationSystem.char_to_i(char) }.sum
-      test = navigation_system.auto_complete.map { |line| value(line) }.sort
-      assert_equal 1605968119, test[test.size / 2]
 
-      # assert_equal 736_920, basin.basins.sort { |a, b| -(a <=> b) }.take(3).inject(:*)
+      assert_equal 392_043, navigation_system.illegal_characters.map { |char| NavigationSystem::TO_VALUE[char] }.sum
+
+      auto_complete_result = navigation_system.auto_complete.map { |line| value(line) }.sort
+      assert_equal 1_605_968_119, auto_complete_result[auto_complete_result.size / 2]
     end
 
     def value(line)
