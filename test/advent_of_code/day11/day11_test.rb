@@ -21,13 +21,13 @@ module AdventOfCode
 '.split("\n").map(&:strip).reject(&:empty?)
 
     def test_example
-      assert_equal 1656, Cave.new(EXAMPLE).steps(100).octopuses.map(&:flash_count).sum
-      assert_equal 195, Cave.new(EXAMPLE).synchronized_step
+      assert_equal 1656, Cave11.new(EXAMPLE).steps(100).octopuses.map(&:flash_count).sum
+      assert_equal 195, Cave11.new(EXAMPLE).synchronized_step
     end
 
     def test_final
-      assert_equal 1713, Cave.new(Helper.load_input(11)).steps(100).octopuses.map(&:flash_count).sum
-      assert_equal 502, Cave.new(Helper.load_input(11)).synchronized_step
+      assert_equal 1713, Cave11.new(Helper.load_input(11)).steps(100).octopuses.map(&:flash_count).sum
+      assert_equal 502, Cave11.new(Helper.load_input(11)).synchronized_step
     end
   end
 end
