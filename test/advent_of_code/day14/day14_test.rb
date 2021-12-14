@@ -26,17 +26,22 @@ BB -> N
 BC -> B
 CC -> N
 CN -> C
-'.split("\n").map(&:strip).reject(&:empty?)
+'.split("\n").map(&:strip).reject(&:empty?).freeze
 
     def test_part1
-      result = Day14.day14(EXAMPLE, 10).group_by { |a| a }.transform_values { |a| a.count }.values.sort
+      result = Day14.day14(EXAMPLE, 10).values.sort
       assert_equal 1588, result.last - result.first
 
-      result = Day14.day14(Helper.load_input(14), 10).group_by { |a| a }.transform_values { |a| a.count }.values.sort
+      result = Day14.day14(Helper.load_input(14), 10).values.sort
       assert_equal 2360, result.last - result.first
     end
 
     def test_part2
+      result = Day14.day14(EXAMPLE, 40).values.sort
+      assert_equal 2188189693529, result.last - result.first
+
+      result = Day14.day14(Helper.load_input(14), 40).values.sort
+      assert_equal 2967977072188, result.last - result.first
     end
   end
 end

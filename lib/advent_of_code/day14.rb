@@ -3,18 +3,40 @@
 module AdventOfCode
   class Day14
     def self.day14(input, step)
-      template = input.shift
+      template, *mapping = input
 
-      insertions = input.map { |line| line.split(" -> ") }.to_h
-      p insertions
+      insertions = mapping.map { |line| line.split(" -> ") }.to_h
+      counts = mapping.map { |line| [line.split(" -> ")[0], 0] }.to_h
 
-      polymers = template.chars
-
-      step.times do
-        polymers = insert_polymer(insertions, polymers)
+      template.chars.each_cons(2) do |pair|
+        counts[pair.join] += 1
       end
 
-      polymers
+      step.times do
+        tmp = counts.transform_values { 0 }
+
+        counts.each do |key, value|
+          a, b = key.chars
+          new_char = insertions[key]
+
+          tmp["#{a}#{new_char}"] += value
+          tmp["#{new_char}#{b}"] += value
+        end
+
+        counts = tmp
+      end
+
+      result = {}
+      counts.each do |key, value|
+        a, b = key.chars
+
+        result[a] = 0 unless result.include? a
+        result[a] += value
+      end
+
+      result[template.chars.last] += 1
+
+      result
     end
 
     def self.insert_polymer(insertions, polymers)
