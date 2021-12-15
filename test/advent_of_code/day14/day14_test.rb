@@ -29,7 +29,9 @@ CN -> C
 '.split("\n").map(&:strip).reject(&:empty?).freeze
 
     def test_part1
-      result = Day14.day14(EXAMPLE, 10).values.sort
+      polymer_gen = PolymerGenerator.new(EXAMPLE)
+      10.times { polymer_gen.advance_one_step }
+      result = polymer_gen.result.values.sort
       assert_equal 1588, result.last - result.first
 
       result = Day14.day14(Helper.load_input(14), 10).values.sort
@@ -38,10 +40,10 @@ CN -> C
 
     def test_part2
       result = Day14.day14(EXAMPLE, 40).values.sort
-      assert_equal 2188189693529, result.last - result.first
+      assert_equal 2_188_189_693_529, result.last - result.first
 
       result = Day14.day14(Helper.load_input(14), 40).values.sort
-      assert_equal 2967977072188, result.last - result.first
+      assert_equal 2_967_977_072_188, result.last - result.first
     end
   end
 end
