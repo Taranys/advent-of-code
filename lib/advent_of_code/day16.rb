@@ -35,10 +35,10 @@ module AdventOfCode
     def parse_literal(content)
       i = 0
       while content[i] == "1"
-        @subpackets << content[i..(i+4)]
+        @subpackets << content[(i+1)..(i+4)]
         i += 5
       end
-      @subpackets << content[i..(i+4)]
+      @subpackets << content[(i+1)..(i+4)]
     end
 
     def parse_operator_0(content)
@@ -46,7 +46,6 @@ module AdventOfCode
 
       i = 0
       while i < @total_length
-        p ["=> 0", i, @total_length, @subpackets, content]
         sp = Packet.decode(content[(16+i)..-1])
         @subpackets << sp
         i += sp.size
@@ -58,7 +57,6 @@ module AdventOfCode
 
       @number_sub_packet.times do ||
         i = @subpackets.map { |sp| sp.size }.sum
-        # p ["=> 1", i, @number_sub_packet, @subpackets, content]
         @subpackets << Packet.decode(content[(12+i)..-1])
       end
     end
@@ -72,8 +70,7 @@ module AdventOfCode
     end
 
     def size
-      # p @length_type_id
-      # return 3 + 3 + 16 + @length_type_id unless @length_type_id.nil?
+      return 6 + @subpackets.count * 5 if literal?
 
       s = 3 + 3
       s += 16 unless @total_length.nil?
@@ -85,6 +82,19 @@ module AdventOfCode
       return @version if literal?
 
       @version + @subpackets.map { |sp| sp.version_sum }.sum
+    end
+
+    def value
+      return @subpackets.map { |p| p.value }.sum if @type_id == 0
+      return @subpackets.map { |p| p.value }.inject(:*) if @type_id == 1
+      return @subpackets.map { |p| p.value }.min if @type_id == 2
+      return @subpackets.map { |p| p.value }.max if @type_id == 3
+      return @subpackets[0].value > @subpackets[1].value ? 1 : 0 if @type_id == 5
+      return @subpackets[0].value < @subpackets[1].value ? 1 : 0 if @type_id == 6
+      return @subpackets[0].value == @subpackets[1].value ? 1 : 0 if @type_id == 7
+
+      # literal
+      @subpackets.join.to_i(2)
     end
   end
 end
