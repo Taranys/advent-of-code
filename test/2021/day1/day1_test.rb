@@ -3,7 +3,7 @@
 require "minitest/autorun"
 
 require_relative "../helper"
-require_relative "../../../lib/advent_of_code/day1"
+require_relative "../../../lib/2021/advent_of_code/day1"
 
 module AdventOfCode
   class Day1Test < Minitest::Test
@@ -35,8 +35,8 @@ module AdventOfCode
     def test_final
       values = AdventOfCode::Helper.load_input(1).map(&:to_i)
 
-      assert_equal 1215, day1_simple(values)
-      assert_equal 1150, day1_complex(values)
+      assert_equal 1018, day1_simple(values)
+      assert_equal 1006, day1_complex(values)
     end
 
     def day1_simple(input)
