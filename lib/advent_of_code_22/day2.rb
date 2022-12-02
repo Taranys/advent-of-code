@@ -13,10 +13,18 @@ module AdventOfCode22
   class Match
     attr_accessor :opponent_choice, :my_choice
 
-    def initialize(line)
+    def initialize(line, advanced)
       v1, v2 = line.split(' ')
       @opponent_choice = DECRYPT[v1.to_sym]
-      @my_choice = DECRYPT[v2.to_sym]
+      @my_choice = advanced ? find_proper_choice(v2, @opponent_choice) : DECRYPT[v2.to_sym]
+    end
+
+    def find_proper_choice(expected, opponent_shape)
+      choices = [:rock, :paper, :scissors]
+
+      return choices.find { |shape| confront(shape, opponent_shape) == :loose } if(expected == 'X')
+      return choices.find { |shape| confront(shape, opponent_shape) == :draw } if(expected == 'Y')
+      return choices.find { |shape| confront(shape, opponent_shape) == :win } if(expected == 'Z')
     end
 
     def value(shape)
@@ -54,13 +62,9 @@ module AdventOfCode22
   end
 
   class Day2
-    def self.parse(line)
-      Match.new(line)
-    end
-
-    def self.compute_score(input)
+    def self.compute_score(input, advanced = false)
       input
-        .map { |line| parse(line) }
+        .map { |line| Match.new(line, advanced) }
         .map { |match| match.my_score }
         .sum
     end

@@ -28,9 +28,15 @@ C Z
       assert_equal 11603, AdventOfCode22::Day2.compute_score(input)
     end
 
-    # def test_second_star
-    #   input = AdventOfCode22::Helper.load_input_raw(1).map(&:to_i)
-    #   assert_equal 208180, AdventOfCode22::Day1.elves(input).take(3).sum
-    # end
+    def test_each_lines_second
+      assert_equal 4, AdventOfCode22::Day2.compute_score(['A Y'], true)
+      assert_equal 1, AdventOfCode22::Day2.compute_score(['B X'], true)
+      assert_equal 7, AdventOfCode22::Day2.compute_score(['C Z'], true)
+    end
+
+    def test_second_star
+      input = AdventOfCode22::Helper.load_input(2)
+      assert_equal 12725, AdventOfCode22::Day2.compute_score(input, true)
+    end
   end
 end
