@@ -3,7 +3,7 @@
 module AdventOfCode
   class Helper
     def self.load_input(day)
-      self.load_input_raw(day).map(&:strip).reject(&:empty?)
+      load_input_raw(day).map(&:strip).reject(&:empty?)
     end
 
     def self.load_input_raw(day)
