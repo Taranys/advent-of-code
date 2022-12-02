@@ -3,7 +3,7 @@
 module AdventOfCode22
   # Day 1 of the advent of code 2021
   class Day1
-    def parse(input)
+    def self.parse(input)
       input
         .map(&:to_i)
         .each_with_object([0]) do |calories, values|
