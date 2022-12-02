@@ -3,15 +3,15 @@
 require "minitest/autorun"
 
 require_relative "../helper"
-require_relative "../../../lib/advent_of_code/day21"
+require_relative "../../../lib/2021/advent_of_code/day21"
 
 module AdventOfCode
   class Day21Test < Minitest::Test
-    EXAMPLE = '
-'.split("\n").map(&:strip).reject(&:empty?)
+    EXAMPLE = "\n".split("\n").map(&:strip).reject(&:empty?)
 
-    truc = { 3 => 1, 4 => 3, 5 => 6, 6 => 7, 7 => 6, 8 => 3, 9 => 1 }
+    # truc = { 3 => 1, 4 => 3, 5 => 6, 6 => 7, 7 => 6, 8 => 3, 9 => 1 }
 
+    # rubocop:disable Metrics/AbcSize
     def test_dice
       dice = Dice.new
       assert_equal 0, dice.roll_count
@@ -25,16 +25,15 @@ module AdventOfCode
       assert_equal 1, dice.roll
       assert_equal 101, dice.roll_count
     end
+    # rubocop:enable Metrics/AbcSize
 
     def test_part1
-      assert_equal 739785, run_game(4, 8)
-      assert_equal 900099, run_game(10, 6)
+      assert_equal 739_785, run_game(4, 8)
+      assert_equal 900_099, run_game(10, 6)
     end
 
     def test_part2
-      values = {}
-
-
+      # values = {}
 
       #
       # possibilities1 = []
@@ -68,6 +67,7 @@ module AdventOfCode
       score
     end
 
+    # rubocop:disable Metrics/AbcSize
     def run_game(position1 = 0, position2 = 0)
       dice = Dice.new
       player1 = Player.new(position1)
@@ -76,10 +76,12 @@ module AdventOfCode
       while player1.score < 1000 && player2.score < 1000
         player1.move 3.times.map { dice.roll }.sum
         break if player1.score >= 1000
+
         player2.move 3.times.map { dice.roll }.sum
       end
 
       player2.score * dice.roll_count
     end
+    # rubocop:enable Metrics/AbcSize
   end
 end

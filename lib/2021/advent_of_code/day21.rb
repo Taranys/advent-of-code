@@ -13,7 +13,6 @@ module AdventOfCode
       @position = ((@position - 1) + value) % 10 + 1
       @score += @position
     end
-
   end
 
   class Dice

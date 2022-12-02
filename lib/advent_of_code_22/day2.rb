@@ -7,37 +7,38 @@ module AdventOfCode22
     B: :paper,
     Y: :paper,
     C: :scissors,
-    Z: :scissors,
-  }
+    Z: :scissors
+  }.freeze
+
+  SHAPE_VALUE = {
+    rock: 1,
+    paper: 2,
+    scissors: 3
+  }.freeze
 
   class Match
     attr_accessor :opponent_choice, :my_choice
 
     def initialize(line, advanced)
-      v1, v2 = line.split(' ')
+      v1, v2 = line.split(" ")
       @opponent_choice = DECRYPT[v1.to_sym]
       @my_choice = advanced ? find_proper_choice(v2, @opponent_choice) : DECRYPT[v2.to_sym]
     end
 
     def find_proper_choice(expected, opponent_shape)
-      choices = [:rock, :paper, :scissors]
+      choices = %i[rock paper scissors]
 
-      return choices.find { |shape| confront(shape, opponent_shape) == :loose } if(expected == 'X')
-      return choices.find { |shape| confront(shape, opponent_shape) == :draw } if(expected == 'Y')
-      return choices.find { |shape| confront(shape, opponent_shape) == :win } if(expected == 'Z')
-    end
-
-    def value(shape)
-      case shape
-      when :rock
-        1
-      when :paper
-        2
-      when :scissors
-        3
+      case expected
+      when "X"
+        choices.find { |shape| confront(shape, opponent_shape) == :loose }
+      when "Y"
+        choices.find { |shape| confront(shape, opponent_shape) == :draw }
+      when "Z"
+        choices.find { |shape| confront(shape, opponent_shape) == :win }
       end
     end
 
+    # rubocop:disable Metrics/CyclomaticComplexity
     def confront(shape1, shape2)
       return :draw if shape1 == shape2
 
@@ -47,6 +48,7 @@ module AdventOfCode22
 
       :loose
     end
+    # rubocop:enable Metrics/CyclomaticComplexity
 
     def outcome(shape1, shape2)
       result = confront(shape1, shape2)
@@ -57,15 +59,15 @@ module AdventOfCode22
     end
 
     def my_score
-      value(@my_choice) + outcome(@my_choice, @opponent_choice)
+      SHAPE_VALUE[@my_choice] + outcome(@my_choice, @opponent_choice)
     end
   end
 
   class Day2
-    def self.compute_score(input, advanced = false)
+    def self.compute_score(input, advanced: false)
       input
         .map { |line| Match.new(line, advanced) }
-        .map { |match| match.my_score }
+        .map(&:my_score)
         .sum
     end
   end

@@ -3,7 +3,7 @@
 require "minitest/autorun"
 
 require_relative "../helper"
-require_relative "../../../lib/advent_of_code/day5"
+require_relative "../../../lib/2021/advent_of_code/day5"
 
 module AdventOfCode
   class Day5Test < Minitest::Test
