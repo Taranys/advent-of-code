@@ -7,7 +7,7 @@ module AdventOfCode
     end
 
     def self.load_input_raw(day)
-      File.open("./test/advent_of_code_22/day#{day}/input.txt").readlines
+      File.open("./test/2021/day#{day}/input.txt").readlines
     end
   end
 end
