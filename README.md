@@ -1,4 +1,4 @@
-# AdventOfCode::2021
+# Ruby::AdventOfCode
 
 ## Installation
 
