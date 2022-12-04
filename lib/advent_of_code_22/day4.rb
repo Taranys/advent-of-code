@@ -5,11 +5,11 @@ module AdventOfCode22
     class Parser
       def self.section_assignments(input)
         input.map do |line|
-          s1, s2 = line.split(',').map { |value| value.split('-') }
+          s1, s2 = line.split(",").map { |value| value.split("-") }
 
           SectionAssignment.new(
             (s1[0]..s1[1]).to_a,
-            (s2[0]..s2[1]).to_a,
+            (s2[0]..s2[1]).to_a
           )
         end
       end
@@ -26,7 +26,7 @@ module AdventOfCode22
       end
 
       def overlapse?
-        overlapse.size != 0
+        !overlapse.empty?
       end
 
       private
