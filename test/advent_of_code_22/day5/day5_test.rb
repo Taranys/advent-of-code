@@ -21,7 +21,7 @@ move 1 from 1 to 2
 )
 
       def test_parse_ship
-        assert_equal 'NDP', Parser.ship(EXAMPLE).top_crates
+        assert_equal "NDP", Parser.ship(EXAMPLE).top_crates
       end
 
       def test_example
@@ -30,7 +30,7 @@ move 1 from 1 to 2
         crane = Crane.new(ship)
         moves.each { |move| crane.apply(move) }
 
-        assert_equal 'CMZ', ship.top_crates
+        assert_equal "CMZ", ship.top_crates
       end
 
       def test_first_star
@@ -40,7 +40,7 @@ move 1 from 1 to 2
         crane = Crane.new(ship)
         moves.each { |move| crane.apply(move) }
 
-        assert_equal 'RLFNRTNFB', ship.top_crates
+        assert_equal "RLFNRTNFB", ship.top_crates
       end
 
       def test_second_example
@@ -49,7 +49,7 @@ move 1 from 1 to 2
         crane = Crane9001.new(ship)
         moves.each { |move| crane.apply(move) }
 
-        assert_equal 'MCD', ship.top_crates
+        assert_equal "MCD", ship.top_crates
       end
 
       def test_second_star
@@ -59,7 +59,7 @@ move 1 from 1 to 2
         crane = Crane9001.new(ship)
         moves.each { |move| crane.apply(move) }
 
-        assert_equal 'MHQTLJRLB', ship.top_crates
+        assert_equal "MHQTLJRLB", ship.top_crates
       end
     end
   end

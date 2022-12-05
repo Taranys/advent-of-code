@@ -4,22 +4,14 @@ module AdventOfCode22
   module Day5
     class Parser
       def self.ship(input)
-        ship_input = input.split("\n\n").first
-        lines = ship_input.split("\n").reject(&:empty?)
-        lines.pop
+        lines = ship_input(input)
 
         ship = Ship.new
         lines
-          .map do |line|
-            r = []
-            line.chars.each_slice(4) do |v|
-              r << v[1]
-            end
-            r
-        end
+          .map { |line| parse_ship_line(line) }
           .reverse
           .each do |line|
-            line.each_with_index { |value, index| ship.add_crate(index, value) if value != ' ' }
+            line.each_with_index { |value, index| ship.add_crate(index, value) if value != " " }
           end
 
         ship
@@ -34,10 +26,25 @@ module AdventOfCode22
           .map { |match| Move.new(match[1], match[2], match[3]) }
       end
 
+      def self.ship_input(input)
+        ship_input = input.split("\n\n").first
+        lines = ship_input.split("\n").reject(&:empty?)
+        lines.pop
+        lines
+      end
+
+      def self.parse_ship_line(line)
+        r = []
+        line.chars.each_slice(4) do |v|
+          r << v[1]
+        end
+        r
+      end
     end
 
     class Ship
       attr_reader :crates
+
       def initialize
         @crates = []
       end
@@ -48,12 +55,13 @@ module AdventOfCode22
       end
 
       def top_crates
-        @crates.map { |a| a.last }.join
+        @crates.map(&:last).join
       end
     end
 
     class Move
       attr_accessor :count, :from, :to
+
       def initialize(count, from_index, to_index)
         @count = count.to_i
         @from = from_index.to_i
@@ -80,11 +88,18 @@ module AdventOfCode22
       end
 
       def apply(move)
+        crates = take_crates(move)
+        @ship.crates[move.to - 1] = @ship.crates[move.to - 1].concat(crates)
+      end
+
+      private
+
+      def take_crates(move)
         buffer = []
         move.count.times do
           buffer << @ship.crates[move.from - 1].pop
         end
-        @ship.crates[move.to - 1] = @ship.crates[move.to - 1].concat(buffer.reverse)
+        buffer.reverse
       end
     end
   end
