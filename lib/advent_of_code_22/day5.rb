@@ -71,7 +71,20 @@ module AdventOfCode22
           crate = @ship.crates[move.from - 1].pop
           @ship.crates[move.to - 1] << crate
         end
-        p @ship.top_crates
+      end
+    end
+
+    class Crane9001
+      def initialize(ship)
+        @ship = ship
+      end
+
+      def apply(move)
+        buffer = []
+        move.count.times do
+          buffer << @ship.crates[move.from - 1].pop
+        end
+        @ship.crates[move.to - 1] = @ship.crates[move.to - 1].concat(buffer.reverse)
       end
     end
   end

@@ -44,12 +44,22 @@ move 1 from 1 to 2
       end
 
       def test_second_example
-        assert_equal 4, Parser.section_assignments(EXAMPLE).count(&:overlapse?)
+        ship = Parser.ship(EXAMPLE)
+        moves = Parser.moves(EXAMPLE)
+        crane = Crane9001.new(ship)
+        moves.each { |move| crane.apply(move) }
+
+        assert_equal 'MCD', ship.top_crates
       end
 
       def test_second_star
-        input = AdventOfCode22::Helper.load_input(4)
-        assert_equal 938, Parser.section_assignments(input).count(&:overlapse?)
+        input = AdventOfCode22::Helper.load_raw(5)
+        ship = Parser.ship(input)
+        moves = Parser.moves(input)
+        crane = Crane9001.new(ship)
+        moves.each { |move| crane.apply(move) }
+
+        assert_equal 'MHQTLJRLB', ship.top_crates
       end
     end
   end
