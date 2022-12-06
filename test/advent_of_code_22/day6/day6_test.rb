@@ -25,7 +25,7 @@ module AdventOfCode22
 
       def test_second_star
         input = AdventOfCode22::Helper.load_input(6).first
-        assert_equal 1816, Parser.distinct_chars_index(input, 14)
+        assert_equal 2625, Parser.distinct_chars_index(input, 14)
       end
     end
   end
