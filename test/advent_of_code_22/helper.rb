@@ -9,5 +9,9 @@ module AdventOfCode22
     def self.load_input_raw(day)
       File.open("./test/advent_of_code_22/day#{day}/input.txt").readlines
     end
+
+    def self.load_raw(day)
+      File.open("./test/advent_of_code_22/day#{day}/input.txt").read
+    end
   end
 end
