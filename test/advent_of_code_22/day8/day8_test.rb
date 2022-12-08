@@ -17,13 +17,12 @@ module AdventOfCode22
 
     class Test < Minitest::Test
       def test_example
-        p Parser.trees(EXAMPLE).visible_trees
         assert_equal 21, Parser.trees(EXAMPLE).visible_trees
       end
 
       def test_first_star
         input = AdventOfCode22::Helper.load_input(8)
-        assert_equal 21, Parser.trees(input).visible_trees
+        assert_equal 1684, Parser.trees(input).visible_trees
       end
 
       def test_second_example
@@ -32,7 +31,7 @@ module AdventOfCode22
 
       def test_second_star
         input = AdventOfCode22::Helper.load_input(8)
-        assert_equal 8, Parser.trees(input).scenic_score.to_a.flatten.max
+        assert_equal 486540, Parser.trees(input).scenic_score.to_a.flatten.max
       end
     end
   end

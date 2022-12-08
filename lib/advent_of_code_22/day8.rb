@@ -5,12 +5,12 @@ module AdventOfCode22
   module Day8
     class Parser
       def self.trees(input)
-        forest = Forest.new
+        forest = Forest.new(input.size)
 
-        input.each do |line|
-          # tree_line = line.chars.map(&:to_i).map { |height| Tree.new(height) }
-          tree_line = line.chars.map(&:to_i)
-          forest.add_trees(tree_line)
+        input.each_with_index do |line, row|
+          line.chars.map(&:to_i).each_with_index do |height, col|
+            forest.add_tree(row, col, height)
+          end
         end
 
         forest
@@ -18,23 +18,22 @@ module AdventOfCode22
     end
 
     class Forest
-      def initialize
-        @trees = []
-        @visibles = []
+      def initialize(size)
+        @trees = Matrix.zero(size)
       end
 
-      def add_trees(tree_line)
-        @trees << tree_line
-        @visibles << tree_line.map { |_| nil }
+      def add_tree(row, col, height)
+        @trees[row, col] = height
       end
 
       def visible_trees
+        @visibles = Matrix.zero(@trees.column_count)
         compute_visible_trees
-        @visibles.flatten.count { |v| v == true }
+        @visibles.to_a.flatten.count { |v| v == true }
       end
 
       def scenic_score
-        @scenic_scores = Matrix.zero(@trees.size)
+        @scenic_scores = Matrix.zero(@trees.column_count)
         @scenic_scores.each_with_index do |_, i, j|
           @scenic_scores[i, j] = compute_scenic_score(i, j)
         end
@@ -43,63 +42,56 @@ module AdventOfCode22
 
       private
 
-      def compute_scenic_score(i, j)
-        forest_size = @trees.size - 1
+      def compute_scenic_score(row, col)
+        height = @trees[row, col]
 
-        return 0 if(i == 0 || i == forest_size || j == 0 || i == forest_size)
+        return 0 if border?(row, col)
 
-        height = @trees[i][j]
-
-        right = @trees[i][(j+1)..forest_size].slice_when { |h| h >= height }.to_a.first&.size || 0
-        left = @trees[i][0..(j-1)].reverse.slice_when { |h| h >= height }.to_a.first&.size || 0
-
-        m = Matrix.rows(@trees)
-        up = m.column(j)[0..(i-1)].reverse.slice_when { |h| h >= height }.to_a.first&.size || 0
-        down = m.column(j)[(i+1)..forest_size].slice_when { |h| h >= height }.to_a.first&.size || 0
-
-        up * down * right * left
+        [up(row, col).reverse, down(row, col), left(row, col).reverse, right(row, col)]
+          .map do |values|
+            values.slice_when { |h| h >= height }.to_a.first&.size || 0
+          end
+          .reduce(:*)
       end
 
       def compute_visible_trees
-        set_edge_visible
-        @trees.each_with_index do |tree_line, i|
-          tree_line.each_with_index do |_, j|
-            @visibles[i][j] = check_visibility(i, j)
+        @trees.each_with_index do |_, row, col|
+          if border?(row, col)
+            @visibles[row, col] = true
+          else
+            @visibles[row, col] = check_visibility(row, col)
           end
         end
       end
 
-      def set_edge_visible
-        @trees.size.times do |i|
-          @visibles[0][i] = true
-          @visibles[i][0] = true
-          @visibles[@trees.size - 1][i] = true
-          @visibles[i][@trees.size - 1] = true
-        end
+      def check_visibility(row, col)
+        tree_height = @trees[row, col]
+
+        left(row, col).max < tree_height ||
+          right(row, col).max < tree_height ||
+          up(row, col).max < tree_height ||
+          down(row, col).max < tree_height
       end
 
-      def check_visibility(i, j)
-        return true if @visibles[i][j]
-
-        tree_height = @trees[i][j]
-        forest_size = @trees.size - 1
-
-        return true if @trees[i][0..(j-1)].max < tree_height
-        return true if @trees[i][(j+1)..forest_size].max < tree_height
-
-        m = Matrix.rows(@trees)
-        return true if m.column(j)[0..(i-1)].max < tree_height
-        return true if m.column(j)[(i+1)..forest_size].max < tree_height
-
-        false
+      def left(row, col)
+        @trees.row(row)[0..col-1]
       end
-    end
 
-    class Tree
-      attr_reader :height
+      def right(row, col)
+        @trees.row(row)[(col+1)..@trees.column_count-1]
+      end
 
-      def initialize(height)
-        @height = height
+      def up(row, col)
+        @trees.column(col)[0..(row-1)]
+      end
+
+      def down(row, col)
+        @trees.column(col)[(row+1)..@trees.row_count-1]
+      end
+
+      def border?(row, col)
+        forest_size = @trees.column_count - 1
+        (row == 0 || row == forest_size || col == 0 || col == forest_size)
       end
     end
   end
