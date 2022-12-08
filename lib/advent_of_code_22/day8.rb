@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'matrix'
+
+require "matrix"
 
 module AdventOfCode22
   module Day8
@@ -56,11 +57,11 @@ module AdventOfCode22
 
       def compute_visible_trees
         @trees.each_with_index do |_, row, col|
-          if border?(row, col)
-            @visibles[row, col] = true
-          else
-            @visibles[row, col] = check_visibility(row, col)
-          end
+          @visibles[row, col] = if border?(row, col)
+                                  true
+                                else
+                                  check_visibility(row, col)
+                                end
         end
       end
 
@@ -74,24 +75,24 @@ module AdventOfCode22
       end
 
       def left(row, col)
-        @trees.row(row)[0..col-1]
+        @trees.row(row)[0..col - 1]
       end
 
       def right(row, col)
-        @trees.row(row)[(col+1)..@trees.column_count-1]
+        @trees.row(row)[(col + 1)..@trees.column_count - 1]
       end
 
       def up(row, col)
-        @trees.column(col)[0..(row-1)]
+        @trees.column(col)[0..(row - 1)]
       end
 
       def down(row, col)
-        @trees.column(col)[(row+1)..@trees.row_count-1]
+        @trees.column(col)[(row + 1)..@trees.row_count - 1]
       end
 
       def border?(row, col)
         forest_size = @trees.column_count - 1
-        (row == 0 || row == forest_size || col == 0 || col == forest_size)
+        (row.zero? || row == forest_size || col.zero? || col == forest_size)
       end
     end
   end

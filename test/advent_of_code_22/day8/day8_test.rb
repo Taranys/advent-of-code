@@ -31,7 +31,7 @@ module AdventOfCode22
 
       def test_second_star
         input = AdventOfCode22::Helper.load_input(8)
-        assert_equal 486540, Parser.trees(input).scenic_score.to_a.flatten.max
+        assert_equal 486_540, Parser.trees(input).scenic_score.to_a.flatten.max
       end
     end
   end
