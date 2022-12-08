@@ -27,13 +27,12 @@ module AdventOfCode22
       end
 
       def test_second_example
-        input = "mjqjpqmgbljsphdztnvjfqwrcgsmlb"
-        assert_equal 19, Parser.distinct_chars_index(input, 14)
+        assert_equal 8, Parser.trees(EXAMPLE).scenic_score.to_a.flatten.max
       end
 
       def test_second_star
-        input = AdventOfCode22::Helper.load_input(6).first
-        assert_equal 2625, Parser.distinct_chars_index(input, 14)
+        input = AdventOfCode22::Helper.load_input(8)
+        assert_equal 8, Parser.trees(input).scenic_score.to_a.flatten.max
       end
     end
   end

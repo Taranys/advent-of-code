@@ -33,7 +33,32 @@ module AdventOfCode22
         @visibles.flatten.count { |v| v == true }
       end
 
+      def scenic_score
+        @scenic_scores = Matrix.zero(@trees.size)
+        @scenic_scores.each_with_index do |_, i, j|
+          @scenic_scores[i, j] = compute_scenic_score(i, j)
+        end
+        @scenic_scores
+      end
+
       private
+
+      def compute_scenic_score(i, j)
+        forest_size = @trees.size - 1
+
+        return 0 if(i == 0 || i == forest_size || j == 0 || i == forest_size)
+
+        height = @trees[i][j]
+
+        right = @trees[i][(j+1)..forest_size].slice_when { |h| h >= height }.to_a.first&.size || 0
+        left = @trees[i][0..(j-1)].reverse.slice_when { |h| h >= height }.to_a.first&.size || 0
+
+        m = Matrix.rows(@trees)
+        up = m.column(j)[0..(i-1)].reverse.slice_when { |h| h >= height }.to_a.first&.size || 0
+        down = m.column(j)[(i+1)..forest_size].slice_when { |h| h >= height }.to_a.first&.size || 0
+
+        up * down * right * left
+      end
 
       def compute_visible_trees
         set_edge_visible
