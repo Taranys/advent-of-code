@@ -82,14 +82,19 @@ module AdventOfCode22
       end
 
       def force_diagonal(head, tail, new_pos)
-        horiz_diff = head.col - tail.col
-        vert_diff = head.row - tail.row
-        if tail.row != new_pos.row && horiz_diff.abs == 1
-          new_pos = Position.new(new_pos.row, head.col)
-        elsif tail.col != new_pos.col && vert_diff.abs == 1
-          new_pos = Position.new(head.row, new_pos.col)
-        end
+        return Position.new(new_pos.row, head.col) if force_horiz_diagonal?(head, tail, new_pos)
+        return Position.new(head.row, new_pos.col) if force_vert_diagonal?(head, tail, new_pos)
         new_pos
+      end
+
+      def force_horiz_diagonal?(head, tail, new_pos)
+        horiz_diff = head.col - tail.col
+        tail.row != new_pos.row && horiz_diff.abs == 1
+      end
+
+      def force_vert_diagonal?(head, tail, new_pos)
+        vert_diff = head.row - tail.row
+        tail.col != new_pos.col && vert_diff.abs == 1
       end
 
       def mark_last_tail_position
