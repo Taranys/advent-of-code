@@ -84,6 +84,7 @@ module AdventOfCode22
       def force_diagonal(head, tail, new_pos)
         return Position.new(new_pos.row, head.col) if force_horiz_diagonal?(head, tail, new_pos)
         return Position.new(head.row, new_pos.col) if force_vert_diagonal?(head, tail, new_pos)
+
         new_pos
       end
 
