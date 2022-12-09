@@ -18,6 +18,17 @@ L 5
 R 2
 ).split("\n").map(&:strip).reject(&:empty?)
 
+EXAMPLE2 = %(
+    R 5
+    U 8
+    L 8
+    D 3
+    R 17
+    D 10
+    L 25
+    U 20
+).split("\n").map(&:strip).reject(&:empty?)
+
     class Test < Minitest::Test
       def test_example
         rd = RopeDimension.new
@@ -33,12 +44,16 @@ R 2
       end
 
       def test_second_example
-        assert_equal 8, Parser.trees(EXAMPLE).scenic_score.to_a.flatten.max
+        rd = RopeDimension.new(10)
+        Parser.rope_movements(EXAMPLE2).each { |move| rd.apply(move) }
+        assert_equal 36, rd.visited.flatten.sum
       end
 
       def test_second_star
-        input = AdventOfCode22::Helper.load_input(8)
-        assert_equal 486_540, Parser.trees(input).scenic_score.to_a.flatten.max
+        input = AdventOfCode22::Helper.load_input(9)
+        rd = RopeDimension.new(10)
+        Parser.rope_movements(input).each { |move| rd.apply(move) }
+        assert_equal 2678, rd.visited.flatten.sum
       end
     end
   end

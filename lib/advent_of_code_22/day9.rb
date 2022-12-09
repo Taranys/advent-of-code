@@ -23,20 +23,19 @@ module AdventOfCode22
     end
 
     class RopeDimension
-      def initialize
+      def initialize(rope_length = 2)
         @dim = Matrix.zero(1000)
-        @head = Position.new(0,0)
-        @tail = Position.new(0,0)
-        mark_tail_position
+        @rope = rope_length.times.map { Position.new(500,500) }
+        mark_last_tail_position
       end
 
       def apply(move)
-        # p [move.direction, move.step]
         move.step.times do
-          move_head(move.direction)
-          tail_follow
-          mark_tail_position
-          # p @tail
+          @rope[0] = move_head(move.direction)
+          (@rope.size-1).times do |i|
+            @rope[i+1] = follow(@rope[i], @rope[i+1])
+          end
+          mark_last_tail_position
         end
       end
 
@@ -46,56 +45,49 @@ module AdventOfCode22
 
       private
 
-      def tail_follow
-        vert_diff = @head.row - @tail.row
-        horiz_diff = @head.col - @tail.col
+      def follow(head, tail)
+        vert_diff = head.row - tail.row
+        horiz_diff = head.col - tail.col
 
-        row = @tail.row
-        row = @head.row-1 if vert_diff > 1
-        row = @head.row+1 if vert_diff < -1
+        p ['---', vert_diff, horiz_diff] if vert_diff.abs > 1 && horiz_diff.abs > 1
 
-        col = @tail.col
-        col = @head.col-1 if horiz_diff > 1
-        col = @head.col+1 if horiz_diff < -1
+        row = tail.row
+        row = head.row-1 if vert_diff > 1
+        row = head.row+1 if vert_diff < -1
+
+        col = tail.col
+        col = head.col-1 if horiz_diff > 1
+        col = head.col+1 if horiz_diff < -1
 
         # force diag
-        if @tail.row != row && horiz_diff != 0
-          col = @head.col
-        elsif @tail.col != col && vert_diff != 0
-          row = @head.row
+        if tail.row != row && horiz_diff.abs == 1
+          col = head.col
+        elsif tail.col != col && vert_diff.abs == 1
+          row = head.row
         end
 
-        @tail = Position.new(row, col)
-        # p @tail
-        # if vert_diff == 0
-        #   if horiz_diff > 0
-        #     @tail = Position.new(@head.row, @head.col-1)
-        #   elsif horiz_diff < 0
-        #     @tail = Position.new(@head.row, @head.col+1)
-        #   end
-        # elsif horiz_diff == 0
-        #   if vert_diff > 0
-        #     @tail = Position.new(@head.row, @head.col-1)
-        #   elsif vert_diff < 0
-        #     @tail = Position.new(@head.row, @head.col+1)
-        #   end
-        # end
+        p [head, tail] if vert_diff.abs > 1 && horiz_diff.abs > 1
+        p [row, col] if vert_diff.abs > 1 && horiz_diff.abs > 1
+
+        Position.new(row, col)
       end
 
-      def mark_tail_position
-        @dim[@tail.row, @tail.col] = 1
+      def mark_last_tail_position
+        last = @rope.last
+        @dim[last.row, last.col] = 1
       end
 
       def move_head(direction)
+        head = @rope.first
         case direction
         when :up
-          @head = Position.new(@head.row+1, @head.col)
+          Position.new(head.row+1, head.col)
         when :right
-          @head = Position.new(@head.row, @head.col+1)
+          Position.new(head.row, head.col+1)
         when :down
-          @head = Position.new(@head.row-1, @head.col)
+          Position.new(head.row-1, head.col)
         when :left
-          @head = Position.new(@head.row, @head.col-1)
+          Position.new(head.row, head.col-1)
         else
           raise "Error #{direction}"
         end
