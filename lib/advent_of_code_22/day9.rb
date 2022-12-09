@@ -59,29 +59,42 @@ module AdventOfCode22
       end
 
       def follow(head, tail)
-        vert_diff = head.row - tail.row
-        horiz_diff = head.col - tail.col
+        row = next_row(head, tail)
+        col = next_col(head, tail)
+        new_pos = Position.new(row, col)
+        force_diagonal(head, tail, new_pos)
+      end
 
+      def next_row(head, tail)
+        vert_diff = head.row - tail.row
         row = tail.row
         row = head.row - 1 if vert_diff > 1
         row = head.row + 1 if vert_diff < -1
+        row
+      end
 
+      def next_col(head, tail)
+        horiz_diff = head.col - tail.col
         col = tail.col
         col = head.col - 1 if horiz_diff > 1
         col = head.col + 1 if horiz_diff < -1
+        col
+      end
 
-        # force diag
-        if tail.row != row && horiz_diff.abs == 1
-          col = head.col
-        elsif tail.col != col && vert_diff.abs == 1
-          row = head.row
+      def force_diagonal(head, tail, new_pos)
+        horiz_diff = head.col - tail.col
+        vert_diff = head.row - tail.row
+        if tail.row != new_pos.row && horiz_diff.abs == 1
+          new_pos = Position.new(new_pos.row, head.col)
+        elsif tail.col != new_pos.col && vert_diff.abs == 1
+          new_pos = Position.new(head.row, new_pos.col)
         end
-
-        Position.new(row, col)
+        new_pos
       end
 
       def mark_last_tail_position
         last = @rope.last
+        p last
         @dim[last.row, last.col] = 1
       end
     end
