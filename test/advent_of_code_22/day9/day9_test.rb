@@ -18,7 +18,7 @@ L 5
 R 2
 ).split("\n").map(&:strip).reject(&:empty?)
 
-EXAMPLE2 = %(
+    EXAMPLE2 = %(
     R 5
     U 8
     L 8
