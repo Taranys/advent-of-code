@@ -22,5 +22,16 @@ module AdventOfCode22
         signals
       end
     end
+
+    class CPU
+      def initialize(signal)
+        @signal = signal
+      end
+
+      def register_at(tick)
+        @signal[tick-1]
+      end
+    end
+
   end
 end

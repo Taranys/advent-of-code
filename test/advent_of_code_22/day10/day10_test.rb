@@ -158,30 +158,16 @@ noop
 
     class Test < Minitest::Test
       def test_example
-        signal = Parser.signal(EXAMPLE)
-        p signal
-        i = 20
-        count = 0
-        while i < signal.size do
-          p [i, signal[i-1]]
-          count += (i * signal[i-1])
-          i += 40
-        end
-        assert_equal 13140, count
+        cpu = CPU.new(Parser.signal(EXAMPLE))
+        signal_strengths = [20, 60, 100, 140, 180, 220].map { |tick| tick * cpu.register_at(tick) }.sum
+        assert_equal 13140, signal_strengths
       end
 
       def test_first_star
         input = AdventOfCode22::Helper.load_input(10)
-        signal = Parser.signal(input)
-        p signal
-        i = 20
-        count = 0
-        while i < signal.size do
-          p [i, signal[i-1]]
-          count += (i * signal[i-1])
-          i += 40
-        end
-        assert_equal 13140, count
+        cpu = CPU.new(Parser.signal(input))
+        signal_strengths = [20, 60, 100, 140, 180, 220].map { |tick| tick * cpu.register_at(tick) }.sum
+        assert_equal 14860, signal_strengths
       end
 
       def test_second_example
