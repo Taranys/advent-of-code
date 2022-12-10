@@ -171,16 +171,41 @@ noop
       end
 
       def test_second_example
-        rd = RopeDimension.new(10)
-        Parser.rope_movements(EXAMPLE2).each { |move| rd.apply(move) }
-        assert_equal 36, rd.visited.flatten.sum
+        expected_output = %(
+##..##..##..##..##..##..##..##..##..##..
+###...###...###...###...###...###...###.
+####....####....####....####....####....
+#####.....#####.....#####.....#####.....
+######......######......######......####
+#######.......#######.......#######.....
+).split("\n").map(&:strip).reject(&:empty?)
+
+        cpu = CPU.new(Parser.signal(EXAMPLE))
+        crt = CRT.new
+        240.times do |tick|
+          crt.draw(tick, cpu.register_at(tick+1))
+        end
+        assert_equal expected_output, crt.print
       end
 
       def test_second_star
-        input = AdventOfCode22::Helper.load_input(9)
-        rd = RopeDimension.new(10)
-        Parser.rope_movements(input).each { |move| rd.apply(move) }
-        assert_equal 2678, rd.visited.flatten.sum
+        expected_output = %(
+###...##..####.####.#..#.#..#.###..#..#.
+#..#.#..#....#.#....#..#.#..#.#..#.#.#..
+#..#.#......#..###..####.#..#.#..#.##...
+###..#.##..#...#....#..#.#..#.###..#.#..
+#.#..#..#.#....#....#..#.#..#.#.#..#.#..
+#..#..###.####.####.#..#..##..#..#.#..#.
+).split("\n").map(&:strip).reject(&:empty?)
+
+        input = AdventOfCode22::Helper.load_input(10)
+        cpu = CPU.new(Parser.signal(input))
+        crt = CRT.new
+        240.times do |tick|
+          crt.draw(tick, cpu.register_at(tick+1))
+        end
+
+        assert_equal expected_output, crt.print
       end
     end
   end

@@ -33,5 +33,20 @@ module AdventOfCode22
       end
     end
 
+    class CRT
+      def initialize
+        @screen = Matrix.build(6, 40) { '.' }
+      end
+
+      def draw(tick, pixel)
+        if tick % 40 == pixel-1 || tick % 40 == pixel || tick % 40 == pixel+1
+          @screen[tick/40, tick % 40] = '#'
+        end
+      end
+
+      def print
+        @screen.row_vectors.map { |row| row.to_a.join }
+      end
+    end
   end
 end
