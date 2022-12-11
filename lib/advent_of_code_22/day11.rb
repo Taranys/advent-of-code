@@ -20,7 +20,7 @@ module AdventOfCode22
     end
 
     class Monkey
-      attr_accessor :items, :inspected_count
+      attr_accessor :items, :inspected_count, :test
 
       def initialize(index, items, operation, test, true_monkey, false_monkey)
         @index = index
@@ -37,6 +37,23 @@ module AdventOfCode22
 
         result = @items.map do |item|
           new_value = (new_item_value(item) / 3).to_i
+          if new_value % @test == 0
+            { next: @true_monkey, item: new_value }
+          else
+            { next: @false_monkey, item: new_value }
+          end
+        end
+        @items = []
+        result
+      end
+
+      def inspect_item_without_stress_release(max_value)
+        @inspected_count += @items.count
+
+        result = @items.map do |item|
+          new_value = new_item_value(item)
+          new_value = new_value % max_value
+
           if new_value % @test == 0
             { next: @true_monkey, item: new_value }
           else

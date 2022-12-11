@@ -62,16 +62,43 @@ Monkey 3:
       end
 
       def test_second_example
-        rd = RopeDimension.new(10)
-        Parser.rope_movements(EXAMPLE2).each { |move| rd.apply(move) }
-        assert_equal 36, rd.visited.flatten.sum
+        monkeys = EXAMPLE.map{ |block| Parser.monkey(block) }
+        count = 0
+        20.times do
+          count += 1
+
+          max_value = monkeys.map(&:test).reduce(:*)
+          # p count
+          monkeys.each do |monkey|
+            monkey.inspect_item_without_stress_release(max_value).each { |result| monkeys[result[:next]].items << result[:item] }
+          end
+          # p monkeys.map{ |m| m.items }
+          # p monkeys.map{ |m| m.inspected_count }
+        end
+        # p monkeys.map(&:items)
+        inspected = monkeys.map(&:inspected_count)
+        assert_equal [99, 97, 8, 103], inspected
       end
 
       def test_second_star
-        input = AdventOfCode22::Helper.load_input(9)
-        rd = RopeDimension.new(10)
-        Parser.rope_movements(input).each { |move| rd.apply(move) }
-        assert_equal 2678, rd.visited.flatten.sum
+        input = AdventOfCode22::Helper.load_raw(11).split("\n\n").map(&:strip)
+        monkeys = input.map{ |block| Parser.monkey(block) }
+        count = 0
+        10000.times do
+          count += 1
+
+          max_value = monkeys.map(&:test).reduce(:*)
+          # p count
+          monkeys.each do |monkey|
+            monkey.inspect_item_without_stress_release(max_value).each { |result| monkeys[result[:next]].items << result[:item] }
+          end
+          # p monkeys.map{ |m| m.items }
+          # p monkeys.map{ |m| m.inspected_count }
+        end
+        # p monkeys.map(&:items)
+        # too low => 8027344865
+        inspected = monkeys.map(&:inspected_count).sort.reverse[0..1].reduce(&:*)
+        assert_equal 0, inspected
       end
     end
   end
