@@ -12,6 +12,12 @@ module AdventOfCode22
             Compare.pair(values[0], values[1])
           end
       end
+
+      def self.entries(input)
+        input.split("\n")
+             .reject(&:empty?)
+             .map { |line| eval(line) }
+      end
     end
 
     class Compare
@@ -35,7 +41,6 @@ module AdventOfCode22
 
         v1.size == v2.size ? :continue : :valid
       end
-
     end
   end
 end

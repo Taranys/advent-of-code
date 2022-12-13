@@ -62,18 +62,55 @@ module AdventOfCode22
         assert_equal 4734, sum
       end
 
-      # def test_second_example
-      #   rd = RopeDimension.new(10)
-      #   Parser.rope_movements(EXAMPLE2).each { |move| rd.apply(move) }
-      #   assert_equal 36, rd.visited.flatten.sum
-      # end
-      #
-      # def test_second_star
-      #   input = AdventOfCode22::Helper.load_input(9)
-      #   rd = RopeDimension.new(10)
-      #   Parser.rope_movements(input).each { |move| rd.apply(move) }
-      #   assert_equal 2678, rd.visited.flatten.sum
-      # end
+      def find_index(ordered_result, v)
+        ordered_result.size.times do |i|
+          if Compare.pair(v, ordered_result[i]) == :valid
+            return i
+          end
+        end
+      end
+
+      def test_second_example
+        pairs = Parser.entries(EXAMPLE)
+        pairs << [[2]]
+        pairs << [[6]]
+
+        ordered_result = []
+        pairs.each do |v|
+          i = find_index(ordered_result, v)
+          if i.nil?
+            ordered_result << v
+          else
+            ordered_result.insert(i, v)
+          end
+        end
+
+        first_divider = ordered_result.find_index { |v| v == [[2]] } + 1
+        second_divider = ordered_result.find_index { |v| v == [[6]] } + 1
+
+        assert_equal 140, first_divider * second_divider
+      end
+
+      def test_second_star
+        pairs = Parser.entries(AdventOfCode22::Helper.load_raw(13))
+        pairs << [[2]]
+        pairs << [[6]]
+
+        ordered_result = []
+        pairs.each do |v|
+          i = find_index(ordered_result, v)
+          if i.nil?
+            ordered_result << v
+          else
+            ordered_result.insert(i, v)
+          end
+        end
+
+        first_divider = ordered_result.find_index { |v| v == [[2]] } + 1
+        second_divider = ordered_result.find_index { |v| v == [[6]] } + 1
+
+        assert_equal 21836, first_divider * second_divider
+      end
     end
   end
 end
