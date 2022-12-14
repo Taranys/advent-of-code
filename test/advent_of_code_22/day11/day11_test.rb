@@ -68,16 +68,12 @@ Monkey 3:
           count += 1
 
           max_value = monkeys.map(&:test).reduce(:*)
-          # p count
           monkeys.each do |monkey|
             monkey.inspect_item_without_stress_release(max_value).each do |result|
               monkeys[result[:next]].items << result[:item]
             end
           end
-          # p monkeys.map{ |m| m.items }
-          # p monkeys.map{ |m| m.inspected_count }
         end
-        # p monkeys.map(&:items)
         inspected = monkeys.map(&:inspected_count)
         assert_equal [99, 97, 8, 103], inspected
       end
@@ -90,19 +86,14 @@ Monkey 3:
           count += 1
 
           max_value = monkeys.map(&:test).reduce(:*)
-          # p count
           monkeys.each do |monkey|
             monkey.inspect_item_without_stress_release(max_value).each do |result|
               monkeys[result[:next]].items << result[:item]
             end
           end
-          # p monkeys.map{ |m| m.items }
-          # p monkeys.map{ |m| m.inspected_count }
         end
-        # p monkeys.map(&:items)
-        # too low => 8027344865
         inspected = monkeys.map(&:inspected_count).sort.reverse[0..1].reduce(&:*)
-        assert_equal 0, inspected
+        assert_equal 11_309_046_332, inspected
       end
     end
   end
