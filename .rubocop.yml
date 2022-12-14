@@ -29,3 +29,10 @@ Metrics/PerceivedComplexity:
 
 Metrics/ModuleLength:
   Enabled: false
+
+Security/Eval:
+  Enabled: false
+
+Naming/MethodParameterName:
+  Enabled: false
+  
