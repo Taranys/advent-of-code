@@ -37,7 +37,6 @@ module AdventOfCode
 
     private
 
-    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def find_adjacents(map, row, column)
       result = []
 
@@ -54,7 +53,6 @@ module AdventOfCode
 
       result
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   end
 
   # Octopus

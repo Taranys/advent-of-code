@@ -39,7 +39,6 @@ module AdventOfCode
       end
     end
 
-    # rubocop:disable Metrics/AbcSize
     def adjacent_points(coordinate)
       row, column = coordinate
       adjacents = []
@@ -51,7 +50,6 @@ module AdventOfCode
 
       adjacents
     end
-    # rubocop:enable Metrics/AbcSize
   end
 
   # Point
