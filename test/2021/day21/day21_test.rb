@@ -11,7 +11,6 @@ module AdventOfCode
 
     # truc = { 3 => 1, 4 => 3, 5 => 6, 6 => 7, 7 => 6, 8 => 3, 9 => 1 }
 
-    # rubocop:disable Metrics/AbcSize
     def test_dice
       dice = Dice.new
       assert_equal 0, dice.roll_count
@@ -25,7 +24,6 @@ module AdventOfCode
       assert_equal 1, dice.roll
       assert_equal 101, dice.roll_count
     end
-    # rubocop:enable Metrics/AbcSize
 
     def test_part1
       assert_equal 739_785, run_game(4, 8)
@@ -67,7 +65,6 @@ module AdventOfCode
       score
     end
 
-    # rubocop:disable Metrics/AbcSize
     def run_game(position1 = 0, position2 = 0)
       dice = Dice.new
       player1 = Player.new(position1)
@@ -82,6 +79,5 @@ module AdventOfCode
 
       player2.score * dice.roll_count
     end
-    # rubocop:enable Metrics/AbcSize
   end
 end

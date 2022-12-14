@@ -5,25 +5,26 @@ require "matrix"
 module AdventOfCode22
   module Day14
     PRINT = {
-      air: ' ',
-      rock: '#',
-      sand: 'o',
-      starting_point: '+',
-    }
+      air: " ",
+      rock: "#",
+      sand: "o",
+      starting_point: "+"
+    }.freeze
 
     class Parser
       def self.cave(input, with_floor: false)
-        values = input.map { |line| line.split(' -> ').map { |block| block.split(',').map(&:to_i) } }
+        values = input.map { |line| line.split(" -> ").map { |block| block.split(",").map(&:to_i) } }
         height = values.map { |row| row.map { |v| v[1] } }.flatten.max
         m = Matrix.build(500, 1000) do |r|
-          next :rock if with_floor && r == height+2
+          next :rock if with_floor && r == height + 2
+
           :air
         end
 
         values.each do |line|
-          (line.size-1).times do |i|
+          (line.size - 1).times do |i|
             col1, row1 = line[i]
-            col2, row2 = line[i+1]
+            col2, row2 = line[i + 1]
 
             col_range = [col1, col2].sort
             row_range = [row1, row2].sort
@@ -49,13 +50,13 @@ module AdventOfCode22
 
         until stuck(row, col)
           if down(row, col) == :air
-            row = row+1
+            row += 1
           elsif down_left(row, col) == :air
-            row = row+1
-            col = col-1
+            row += 1
+            col -= 1
           elsif down_right(row, col) == :air
-            row = row+1
-            col = col+1
+            row += 1
+            col += 1
           end
           return false if row >= 400
         end
@@ -69,21 +70,21 @@ module AdventOfCode22
       end
 
       def down_left(row, col)
-        @matrix[row+1, col-1]
+        @matrix[row + 1, col - 1]
       end
 
       def down(row, col)
-        @matrix[row+1, col]
+        @matrix[row + 1, col]
       end
 
       def down_right(row, col)
-        @matrix[row+1, col+1]
+        @matrix[row + 1, col + 1]
       end
 
       def print
         File.open("./log.txt", "w") do |f|
           @matrix.row_vectors.each do |line|
-            f.write "#{line.to_a.map{ |v| PRINT[v] }.join('')}\n"
+            f.write "#{line.to_a.map { |v| PRINT[v] }.join("")}\n"
           end
         end
       end

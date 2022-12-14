@@ -18,9 +18,7 @@ module AdventOfCode22
       def test_example
         cave = Parser.cave(EXAMPLE)
         count = 0
-        while cave.drop_sand do
-          count = count+1
-        end
+        count += 1 while cave.drop_sand
         # cave.print
         assert_equal 24, count
       end
@@ -28,9 +26,7 @@ module AdventOfCode22
       def test_first_star
         cave = Parser.cave(INPUT)
         count = 0
-        while cave.drop_sand do
-          count = count +1
-        end
+        count += 1 while cave.drop_sand
         # cave.print
         assert_equal 799, count
       end
@@ -38,9 +34,7 @@ module AdventOfCode22
       def test_second_example
         cave = Parser.cave(EXAMPLE, with_floor: true)
         count = 0
-        while cave.drop_sand do
-          count = count+1
-        end
+        count += 1 while cave.drop_sand
         # cave.print
         assert_equal 93, count
       end
@@ -48,11 +42,9 @@ module AdventOfCode22
       def test_second_star
         cave = Parser.cave(INPUT, with_floor: true)
         count = 0
-        while cave.drop_sand do
-          count = count+1
-        end
+        count += 1 while cave.drop_sand
         # cave.print
-        assert_equal 29076, count
+        assert_equal 29_076, count
       end
     end
   end
