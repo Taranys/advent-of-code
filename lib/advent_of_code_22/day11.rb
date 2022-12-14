@@ -4,17 +4,15 @@ require "matrix"
 
 module AdventOfCode22
   module Day11
-
     class Parser
       def self.monkey(block)
         lines = block.split("\n")
         Monkey.new(
-          /Monkey (\d+):/.match(lines[0])[1].to_i,
-          /Starting items: (.+)$/.match(lines[1])[1].split(',').map(&:strip).map(&:to_i),
+          /Starting items: (.+)$/.match(lines[1])[1].split(",").map(&:strip).map(&:to_i),
           /Operation: new = (.+)$/.match(lines[2])[1],
           /Test: divisible by (\d+)/.match(lines[3])[1].to_i,
           /If true: throw to monkey (\d+)/.match(lines[4])[1].to_i,
-          /If false: throw to monkey (\d+)/.match(lines[5])[1].to_i,
+          /If false: throw to monkey (\d+)/.match(lines[5])[1].to_i
         )
       end
     end
@@ -22,10 +20,9 @@ module AdventOfCode22
     class Monkey
       attr_accessor :items, :inspected_count, :test
 
-      def initialize(index, items, operation, test, true_monkey, false_monkey)
-        @index = index
+      def initialize(items, operation, test, true_monkey, false_monkey)
         @items = items
-        @operation = operation.split(' ')
+        @operation = operation.split(" ")
         @test = test
         @true_monkey = true_monkey
         @false_monkey = false_monkey
@@ -37,7 +34,7 @@ module AdventOfCode22
 
         result = @items.map do |item|
           new_value = (new_item_value(item) / 3).to_i
-          if new_value % @test == 0
+          if (new_value % @test).zero?
             { next: @true_monkey, item: new_value }
           else
             { next: @false_monkey, item: new_value }
@@ -54,7 +51,7 @@ module AdventOfCode22
           new_value = new_item_value(item)
           new_value = new_value % max_value
 
-          if new_value % @test == 0
+          if (new_value % @test).zero?
             { next: @true_monkey, item: new_value }
           else
             { next: @false_monkey, item: new_value }
@@ -66,8 +63,8 @@ module AdventOfCode22
 
       def new_item_value(value)
         a, op, b = @operation
-        a = value if a == 'old'
-        b = value if b == 'old'
+        a = value if a == "old"
+        b = value if b == "old"
         a.to_i.send(op.to_sym, b.to_i)
       end
     end

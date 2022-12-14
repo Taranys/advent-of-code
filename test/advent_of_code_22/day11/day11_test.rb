@@ -39,30 +39,30 @@ Monkey 3:
 
     class Test < Minitest::Test
       def test_example
-        monkeys = EXAMPLE.map{ |block| Parser.monkey(block) }
+        monkeys = EXAMPLE.map { |block| Parser.monkey(block) }
         20.times do
           monkeys.each do |monkey|
             monkey.inspect_item.each { |result| monkeys[result[:next]].items << result[:item] }
           end
         end
         inspected = monkeys.map(&:inspected_count).sort.reverse
-        assert_equal 10605, inspected[0] * inspected[1]
+        assert_equal 10_605, inspected[0] * inspected[1]
       end
 
       def test_first_star
         input = AdventOfCode22::Helper.load_raw(11).split("\n\n").map(&:strip)
-        monkeys = input.map{ |block| Parser.monkey(block) }
+        monkeys = input.map { |block| Parser.monkey(block) }
         20.times do
           monkeys.each do |monkey|
             monkey.inspect_item.each { |result| monkeys[result[:next]].items << result[:item] }
           end
         end
         inspected = monkeys.map(&:inspected_count).sort.reverse
-        assert_equal 50616, inspected[0] * inspected[1]
+        assert_equal 50_616, inspected[0] * inspected[1]
       end
 
       def test_second_example
-        monkeys = EXAMPLE.map{ |block| Parser.monkey(block) }
+        monkeys = EXAMPLE.map { |block| Parser.monkey(block) }
         count = 0
         20.times do
           count += 1
@@ -70,7 +70,9 @@ Monkey 3:
           max_value = monkeys.map(&:test).reduce(:*)
           # p count
           monkeys.each do |monkey|
-            monkey.inspect_item_without_stress_release(max_value).each { |result| monkeys[result[:next]].items << result[:item] }
+            monkey.inspect_item_without_stress_release(max_value).each do |result|
+              monkeys[result[:next]].items << result[:item]
+            end
           end
           # p monkeys.map{ |m| m.items }
           # p monkeys.map{ |m| m.inspected_count }
@@ -82,15 +84,17 @@ Monkey 3:
 
       def test_second_star
         input = AdventOfCode22::Helper.load_raw(11).split("\n\n").map(&:strip)
-        monkeys = input.map{ |block| Parser.monkey(block) }
+        monkeys = input.map { |block| Parser.monkey(block) }
         count = 0
-        10000.times do
+        10_000.times do
           count += 1
 
           max_value = monkeys.map(&:test).reduce(:*)
           # p count
           monkeys.each do |monkey|
-            monkey.inspect_item_without_stress_release(max_value).each { |result| monkeys[result[:next]].items << result[:item] }
+            monkey.inspect_item_without_stress_release(max_value).each do |result|
+              monkeys[result[:next]].items << result[:item]
+            end
           end
           # p monkeys.map{ |m| m.items }
           # p monkeys.map{ |m| m.inspected_count }
