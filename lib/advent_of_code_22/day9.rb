@@ -100,7 +100,6 @@ module AdventOfCode22
 
       def mark_last_tail_position
         last = @rope.last
-        p last
         @dim[last.row, last.col] = 1
       end
     end
