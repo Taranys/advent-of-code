@@ -7,10 +7,10 @@ module AdventOfCode22
     class Parser
       def self.pair(input)
         input.split("\n\n")
-          .map do |lines|
-            values = lines.split("\n").map { |line| eval(line) }
-            Compare.pair(values[0], values[1])
-          end
+             .map do |lines|
+          values = lines.split("\n").map { |line| eval(line) }
+          Compare.pair(values[0], values[1])
+        end
       end
 
       def self.entries(input)
@@ -25,6 +25,7 @@ module AdventOfCode22
         if v1.is_a?(Integer) && v2.is_a?(Integer)
           return :valid if v1 < v2
           return :invalid if v1 > v2
+
           return :continue
         end
 

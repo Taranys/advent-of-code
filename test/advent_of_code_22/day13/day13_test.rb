@@ -43,14 +43,14 @@ module AdventOfCode22
         assert_equal :valid, Compare.pair([2, 4], [3, 2])
         assert_equal :invalid, Compare.pair([3, 4], [3, 2])
 
-        assert_equal :invalid, Compare.pair([7,7,7,7], [7,7,7])
+        assert_equal :invalid, Compare.pair([7, 7, 7, 7], [7, 7, 7])
       end
 
       def test_example
         pairs = Parser.pair(EXAMPLE)
         result = []
         pairs.each_with_index do |p, i|
-          result << i+1 if p == :valid
+          result << i + 1 if p == :valid
         end
         assert_equal [1, 2, 4, 6], result
       end
@@ -58,15 +58,13 @@ module AdventOfCode22
       def test_first_star
         pairs = Parser.pair(AdventOfCode22::Helper.load_raw(13))
         sum = 0
-        pairs.each_with_index { |p, i| sum += i+1 if p == :valid }
+        pairs.each_with_index { |p, i| sum += i + 1 if p == :valid }
         assert_equal 4734, sum
       end
 
       def find_index(ordered_result, v)
         ordered_result.size.times do |i|
-          if Compare.pair(v, ordered_result[i]) == :valid
-            return i
-          end
+          return i if Compare.pair(v, ordered_result[i]) == :valid
         end
       end
 
@@ -109,7 +107,7 @@ module AdventOfCode22
         first_divider = ordered_result.find_index { |v| v == [[2]] } + 1
         second_divider = ordered_result.find_index { |v| v == [[6]] } + 1
 
-        assert_equal 21836, first_divider * second_divider
+        assert_equal 21_836, first_divider * second_divider
       end
     end
   end
