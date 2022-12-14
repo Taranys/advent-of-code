@@ -160,14 +160,14 @@ noop
       def test_example
         cpu = CPU.new(Parser.signal(EXAMPLE))
         signal_strengths = [20, 60, 100, 140, 180, 220].map { |tick| tick * cpu.register_at(tick) }.sum
-        assert_equal 13140, signal_strengths
+        assert_equal 13_140, signal_strengths
       end
 
       def test_first_star
         input = AdventOfCode22::Helper.load_input(10)
         cpu = CPU.new(Parser.signal(input))
         signal_strengths = [20, 60, 100, 140, 180, 220].map { |tick| tick * cpu.register_at(tick) }.sum
-        assert_equal 14860, signal_strengths
+        assert_equal 14_860, signal_strengths
       end
 
       def test_second_example
@@ -183,7 +183,7 @@ noop
         cpu = CPU.new(Parser.signal(EXAMPLE))
         crt = CRT.new
         240.times do |tick|
-          crt.draw(tick, cpu.register_at(tick+1))
+          crt.draw(tick, cpu.register_at(tick + 1))
         end
         assert_equal expected_output, crt.print
       end
@@ -202,7 +202,7 @@ noop
         cpu = CPU.new(Parser.signal(input))
         crt = CRT.new
         240.times do |tick|
-          crt.draw(tick, cpu.register_at(tick+1))
+          crt.draw(tick, cpu.register_at(tick + 1))
         end
 
         assert_equal expected_output, crt.print
