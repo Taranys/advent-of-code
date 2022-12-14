@@ -35,30 +35,31 @@ $ ls
 ).split("\n").map(&:strip).reject(&:empty?)
 
       def test_example
-        assert_equal 95437, Parser.root(EXAMPLE).all_directories.map(&:size).reject { |size| size > 100000 }.sum
+        assert_equal 95_437, Parser.root(EXAMPLE).all_directories.map(&:size).reject { |size| size > 100_000 }.sum
       end
 
       def test_first_star
         input = AdventOfCode22::Helper.load_input(7)
-        p Parser.root(input).all_directories.map { |dir| "#{dir.name} #{dir.size}" }
-        assert_equal 1513699, Parser.root(input).all_directories.map(&:size).reject { |size| size > 100000 }.sum
+        assert_equal 1_513_699, Parser.root(input).all_directories.map(&:size).reject { |size| size > 100_000 }.sum
       end
 
       def test_second_example
         file_system = Parser.root(EXAMPLE)
-        current_available_space = 70000000 - file_system.size
-        needed_space = 30000000 - current_available_space
+        current_available_space = 70_000_000 - file_system.size
+        needed_space = 30_000_000 - current_available_space
 
-        assert_equal 24933642, file_system.all_directories.map(&:size).sort.reject { |size| size < needed_space }.first
+        assert_equal 24_933_642, file_system.all_directories.map(&:size).sort.reject { |size|
+                                   size < needed_space
+                                 }.first
       end
 
       def test_second_star
         input = AdventOfCode22::Helper.load_input(7)
         file_system = Parser.root(input)
-        current_available_space = 70000000 - file_system.size
-        needed_space = 30000000 - current_available_space
+        current_available_space = 70_000_000 - file_system.size
+        needed_space = 30_000_000 - current_available_space
 
-        assert_equal 7991939, file_system.all_directories.map(&:size).sort.reject { |size| size < needed_space }.first
+        assert_equal 7_991_939, file_system.all_directories.map(&:size).sort.reject { |size| size < needed_space }.first
       end
     end
   end

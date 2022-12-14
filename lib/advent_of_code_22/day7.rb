@@ -4,14 +4,14 @@ module AdventOfCode22
   module Day7
     class Parser
       def self.root(input)
-        root = Dir.new(nil, '/')
+        root = Dir.new(nil, "/")
         current = root
 
         input.each do |line|
-          next if(line == '$ cd /')
-          next if(line == '$ ls')
+          next if line == "$ cd /"
+          next if line == "$ ls"
 
-          if line == '$ cd ..'
+          if line == "$ cd .."
             current = current.parent
             next
           end
@@ -20,7 +20,10 @@ module AdventOfCode22
           current.add_child(Dir.new(current, new_dir_matcher[1])) unless new_dir_matcher.nil?
 
           new_file_matcher = /(\d+) (.*)/.match(line)
-          current.add_child(File.new(current, new_file_matcher[2], new_file_matcher[1].to_i)) unless new_file_matcher.nil?
+          unless new_file_matcher.nil?
+            current.add_child(File.new(current, new_file_matcher[2],
+                                       new_file_matcher[1].to_i))
+          end
 
           go_inside_matcher = /[$] cd (.*)/.match(line)
           current = current.child(go_inside_matcher[1]) unless go_inside_matcher.nil?
@@ -50,6 +53,7 @@ module AdventOfCode22
       def all_directories(entries = [])
         @children.each do |child|
           next if child.is_a? File
+
           child.all_directories entries
         end
         entries << self
